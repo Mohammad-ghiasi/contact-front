@@ -33,7 +33,7 @@ export default function Contact() {
             );
 
             console.log( response.data.data);
-        } catch (error) {
+        } catch (error: any) {
             if (error.response) {
                 // Request made and server responded with a status code
                 // that falls out of the range of 2xx

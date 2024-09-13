@@ -43,19 +43,20 @@ const ContactsList = () => {
     const { mutate: deleteMutation } = useMutation({
         mutationFn: deleteContact,
         onMutate: async (contactId: string) => {
-            await queryClient.cancelQueries(['contacts']); // Cancel any in-flight queries
+            // Cancel any in-flight queries
+            await queryClient.cancelQueries({ queryKey: ['contacts'] });
 
-            const previousContacts = queryClient.getQueryData<Contact[]>('contacts');
+            const previousContacts = queryClient.getQueryData<Contact[]>(['contacts']);
 
             // Optimistically remove the contact from the list
-            queryClient.setQueryData('contacts', (old: Contact[] | undefined) =>
+            queryClient.setQueryData(['contacts'], (old: Contact[] | undefined) =>
                 old?.filter(contact => contact._id !== contactId)
             );
 
             return { previousContacts }; // Provide rollback data in case of failure
         },
-        onError: (error, contactId, context) => {
-            queryClient.setQueryData('contacts', context?.previousContacts); // Rollback on error
+        onError: (error: Error, contactId: string, context: any) => {
+            queryClient.setQueryData(['contacts'], context?.previousContacts); // Rollback on error
             toast({
                 title: 'Error deleting contact.',
                 description: error.message,
@@ -66,7 +67,7 @@ const ContactsList = () => {
         },
         onSettled: () => {
             // Refetch contacts whether success or failure happens
-            queryClient.invalidateQueries(['contacts']);
+            queryClient.invalidateQueries({ queryKey: ['contacts'] });
         },
         onSuccess: () => {
             toast({
@@ -123,7 +124,7 @@ const ContactsList = () => {
                             onClose={() => {
                                 setSelectedContact(null); // Clear selected contact
                                 onClose(); // Close the modal
-                                queryClient.invalidateQueries(['contacts']); // Refetch contacts for fresh data
+                                queryClient.invalidateQueries({ queryKey: ['contacts'] }); // Refetch contacts for fresh data
                             }}
                             contact={selectedContact}
                         />
