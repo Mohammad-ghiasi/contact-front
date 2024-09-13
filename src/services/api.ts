@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export default axios.create({
-  baseURL: 'https://contacts-api-3q2l.vercel.app',
+  baseURL: 'http://localhost:3000/',
   withCredentials: true, // Enable credentials
 });
 
