@@ -20,7 +20,7 @@ export default async function Home() {
       {isAuthenticated && (
         <>
           <UserInfo />
-          {/* <ContactsList /> */}
+          <ContactsList />
           <Ammm />
         </>
       )}
