@@ -16,6 +16,8 @@ type Contact = {
 // Fetch contacts function
 const fetchContacts = async (): Promise<Contact[]> => {
     const response = await api.get('/get-contacts');
+    console.log('api');
+    
     return response.data.data;
 };
 
