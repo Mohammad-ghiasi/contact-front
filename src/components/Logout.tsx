@@ -23,7 +23,7 @@ export default function Logout() {
                 deleteCookie('username'); 
                 setTimeout(() => {
                     router.refresh()
-                }, 3000)
+                }, 1500)
             })
             .catch((error) => {
                 toast({

@@ -1,4 +1,3 @@
-// app/login/page.tsx
 "use client";
 import { useForm, SubmitHandler } from "react-hook-form";
 import {
@@ -12,9 +11,10 @@ import {
     Heading,
     useToast,
 } from "@chakra-ui/react";
-import Cookies from "js-cookie";
 import api from "@/services/api";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 // Define the form input types
 type LoginFormInputs = {
@@ -23,13 +23,11 @@ type LoginFormInputs = {
 };
 
 export default function LoginForm() {
-    const toast = useToast(); // Initialize the toast hook
-    const router = useRouter(); // Initialize the router hook
-
+    const toast = useToast();
+    const router = useRouter();
     const setCookie = (name: string, value: string, days: number) => {
         Cookies.set(name, value, { expires: days }); // Use js-cookie to set the cookie
     };
-
     const {
         register,
         handleSubmit,
@@ -38,33 +36,35 @@ export default function LoginForm() {
     } = useForm<LoginFormInputs>();
 
     const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
-        api.post("/auth/login", data, { withCredentials: true})
-            .then((response) => {
-                toast({
-                    title: "Login Successful.",
-                    description: "You've logged in successfully.",
-                    status: "success",
-                    duration: 5000,
-                    isClosable: true,
-                });
-                setCookie('username', data.username, 7); // Set cookie for 7 days
-                setTimeout(() => {
-                    reset()
-                    router.push("/");
-                    router.refresh()
+        try {
+            // Perform login
+            const response = await api.post("/auth/login", data);
+            const token = response.data.token;
 
-                }, 3000)
-            })
-            .catch((error) => {
-
-                toast({
-                    title: "Login Failed.",
-                    description: error.response.data.message,
-                    status: "error",
-                    duration: 5000,
-                    isClosable: true,
-                });
-            })
+            // Set the token in the cookie using your backend route
+            await axios.post("http://localhost:3001/api/auth/set-cookie", { token });
+            await setCookie('username', data.username, 7); // Set cookie for 7 days
+            toast({
+                title: "Login Successful.",
+                description: "You've logged in successfully.",
+                status: "success",
+                duration: 5000,
+                isClosable: true,
+            });
+            setTimeout(() => {
+                reset();
+                router.push("/");
+                router.refresh();
+            }, 1500);
+        } catch (error: any) {
+            toast({
+                title: "Login Failed.",
+                description: error.response?.data?.message || "An error occurred",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
+        }
     };
 
     return (
@@ -114,11 +114,6 @@ export default function LoginForm() {
                                     value: 8,
                                     message: "Password must be at least 8 characters",
                                 },
-                                // pattern: {
-                                //     value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#]).{8,}$/,
-                                //     message:
-                                //         "Password must contain at least one uppercase, one lowercase, one number, and one special character",
-                                // },
                             })}
                         />
                         <FormErrorMessage>

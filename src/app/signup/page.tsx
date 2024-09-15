@@ -50,7 +50,7 @@ export default function SignUpForm() {
             setTimeout(() => {
                 reset();
                 router.push("/login");
-            }, 3000);
+            }, 1500);
         } catch (error: any) {
             toast({
                 title: "Sign Up Failed.",
