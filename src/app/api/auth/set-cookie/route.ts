@@ -9,13 +9,13 @@ export async function POST(req: Request) {
         }
 
         const response = NextResponse.json({ message: 'Cookie set successfully' });
-        response.cookies.set('auth_token', token, {
-            httpOnly: true,  // Ensure the cookie cannot be accessed via JavaScript
-            secure: true, // Use secure cookies in production
-            sameSite: 'strict',  // Helps prevent CSRF attacks
-            path: '/',
-            maxAge: 60 * 60 * 24 * 7 // 7 days
-        });
+        // response.cookies.set('auth_token', token, {
+        //     httpOnly: true,  // Ensure the cookie cannot be accessed via JavaScript
+        //     secure: true, // Use secure cookies in production
+        //     sameSite: 'strict',  // Helps prevent CSRF attacks
+        //     path: '/',
+        //     maxAge: 60 * 60 * 24 * 7 // 7 days
+        // });
 
         return response;
     } catch (error) {
