@@ -42,7 +42,7 @@ export default function LoginForm() {
             const token = response.data.token;
 
             // Set the token in the cookie using your backend route
-            await axios.post("https://contact-front-80adandi4-mohammad-ghiasis-projects.vercel.app/api/auth/set-cookie", { token });
+            await axios.post("https://contacts-api-3q2l.vercel.app/api/auth/set-cookie", { token });
             await setCookie('username', data.username, 7); // Set cookie for 7 days
             toast({
                 title: "Login Successful.",
