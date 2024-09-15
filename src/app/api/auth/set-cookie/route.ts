@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     response.cookies.set("auth_token", token, {
       maxAge: 60 * 60 * 24 * 7, // 7 days
       httpOnly: true, // Ensure the cookie cannot be accessed via JavaScript
-      secure: true, // Ensure cookies are sent over HTTPS
+      secure: false, // Ensure cookies are sent over HTTPS
       sameSite: "none", // Helps prevent CSRF attacks
       domain: "https://backend-2-two.vercel.app",
       path: "/",
