@@ -17,7 +17,7 @@ export async function POST(req: Request) {
       httpOnly: true, // Ensure the cookie cannot be accessed via JavaScript
       secure: true, // Ensure cookies are sent over HTTPS
       sameSite: "none", // Helps prevent CSRF attacks
-      domain: "https://contact-front-blush.vercel.app",
+      domain: "https://backend-2-two.vercel.app",
       path: "/",
     });
 
