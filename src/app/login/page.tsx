@@ -27,7 +27,7 @@ export default function LoginForm() {
 
     // Function to set cookies
     const setCookie = (name: string, value: string, days: number) => {
-        Cookies.set(name, value, { expires: days, sameSite: 'None', secure: true });
+        Cookies.set(name, value, { expires: days, sameSite: 'Lax', secure: true });
     };
 
     const {
