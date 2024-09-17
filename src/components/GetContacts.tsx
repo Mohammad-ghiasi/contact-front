@@ -15,15 +15,14 @@ type Contact = {
 
 // Fetch contacts function
 const fetchContacts = async (): Promise<Contact[]> => {
-    const response = await api.get('/get-contacts');
-    console.log('api');
+    const response = await api.get('/contacts/get-contacts');
     
     return response.data.data;
 };
 
 // Delete contact function
 const deleteContact = async (contactId: string) => {
-    await api.delete(`/remove-contact?id=${contactId}`);
+    await api.delete(`/contacts/remove-contact?id=${contactId}`);
 };
 
 const ContactsList = () => {

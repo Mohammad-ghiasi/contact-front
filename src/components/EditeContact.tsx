@@ -52,7 +52,7 @@ export default function EditContactModal({
     const toast = useToast();
 
     const onSubmit: SubmitHandler<EditContactFormInputs> = async (data) => {
-        await api.put("/edit-contact", {
+        await api.put("/contacts/edit-contact", {
             id: contact._id, // Pass the contact ID to update
             ...data,
         })

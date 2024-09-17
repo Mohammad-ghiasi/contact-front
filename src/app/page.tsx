@@ -21,9 +21,9 @@ export default async function Home() {
         <>
           <UserInfo />
           <ContactsList />
-          <Ammm />
         </>
       )}
+      <Ammm />
     </>
   );
 }

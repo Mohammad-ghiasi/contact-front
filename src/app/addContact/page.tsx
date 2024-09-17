@@ -33,7 +33,7 @@ export default function ContactForm() {
 
     // Form submit handler
     const onSubmit: SubmitHandler<ContactFormInputs> = (data) => {
-        api.post('/contact', data)
+        api.post('/contacts/contact', data)
             .then((response) => {
                 toast({
                     title: "Contact Added Successful.",

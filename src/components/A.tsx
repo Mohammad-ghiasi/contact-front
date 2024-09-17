@@ -5,7 +5,7 @@ import React from 'react'
 
 export default function Ammm() {
     const getdata = () => {
-        api.get('get-contacts')
+        api.get('contacts/get-contacts')
         .then((res) => {
             console.log(res);
             

@@ -29,7 +29,7 @@ export default function Contact() {
             //     data
             // );
             const response = await api.get(
-                "/get-contacts"
+                "contacts/get-contacts"
             );
 
             console.log( response.data.data);
