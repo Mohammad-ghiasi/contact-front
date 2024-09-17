@@ -1,4 +1,5 @@
 import Ammm from "@/components/A";
+import Ggg from "@/components/contacts/post";
 import Contact from "@/components/contacts/post";
 import ContactsList from "@/components/GetContacts";
 import Header from "@/components/header/Header";
@@ -21,9 +22,10 @@ export default async function Home() {
         <>
           <UserInfo />
           <ContactsList />
+          <Ggg />
+          <Ammm />
         </>
       )}
-      <Ammm />
     </>
   );
 }

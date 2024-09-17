@@ -3,7 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import api from "@/services/api";
 
-export default function Contact() {
+export default function Ggg() {
     const [loading, setLoading] = useState(false);
 
     const handleSignup = async () => {
@@ -29,10 +29,10 @@ export default function Contact() {
             //     data
             // );
             const response = await api.get(
-                "contacts/get-contacts"
+                "cookie"
             );
 
-            console.log( response.data.data);
+            console.log( response);
         } catch (error: any) {
             if (error.response) {
                 // Request made and server responded with a status code
