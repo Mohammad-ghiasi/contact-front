@@ -13,7 +13,6 @@ import {
 } from "@chakra-ui/react";
 import api from "@/services/api";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import Cookies from "js-cookie";
 
 // Define the form input types
@@ -25,9 +24,12 @@ type LoginFormInputs = {
 export default function LoginForm() {
     const toast = useToast();
     const router = useRouter();
+
+    // Function to set cookies
     const setCookie = (name: string, value: string, days: number) => {
-        Cookies.set(name, value, { expires: days }); // Use js-cookie to set the cookie
+        Cookies.set(name, value, { expires: days, sameSite: 'None', secure: true });
     };
+
     const {
         register,
         handleSubmit,
@@ -41,10 +43,10 @@ export default function LoginForm() {
             const response = await api.post("/auth/login", data);
             const token = response.data.token;
 
-            // Set the token in the cookie using your backend route
-            // await axios.post("http://localhost:3001/api/auth/set-cookie", { token }, { withCredentials: true });
-            await setCookie('auth_token', token, 7); // Set cookie for 7 days
-            await setCookie('username', data.username, 7); // Set cookie for 7 days
+            // Set the token in cookies
+            setCookie('auth_token', token, 7); // Set cookie for 7 days
+            setCookie('username', data.username, 7); // Set cookie for 7 days
+
             toast({
                 title: "Login Successful.",
                 description: "You've logged in successfully.",
@@ -52,10 +54,10 @@ export default function LoginForm() {
                 duration: 5000,
                 isClosable: true,
             });
+
             setTimeout(() => {
                 reset();
                 router.push("/");
-                router.refresh();
             }, 1500);
         } catch (error: any) {
             toast({
