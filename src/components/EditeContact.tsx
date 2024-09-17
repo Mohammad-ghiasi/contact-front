@@ -16,8 +16,10 @@ import {
     useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import api from "@/services/api";
+import Cookies from 'js-cookie'; // Import js-cookie
 import { useRouter } from "next/navigation";
+import api from "@/services/api";
+
 interface Contact {
     _id: string;
     name: string;
@@ -41,7 +43,7 @@ export default function EditContactModal({
     onClose,
     contact,
 }: EditContactModalProps) {
-    const router = useRouter()
+    const router = useRouter();
     // Initialize useForm with default values
     const { register, handleSubmit, formState: { errors } } = useForm<EditContactFormInputs>({
         defaultValues: {
@@ -52,9 +54,26 @@ export default function EditContactModal({
     const toast = useToast();
 
     const onSubmit: SubmitHandler<EditContactFormInputs> = async (data) => {
+        const token = Cookies.get('auth_token'); // Get the auth_token from cookies
+
+        if (!token) {
+            toast({
+                title: "Error",
+                description: "No auth_token found in cookies",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+            return;
+        }
+
         await api.put("/contacts/edit-contact", {
             id: contact._id, // Pass the contact ID to update
             ...data,
+        }, {
+            params: {
+                auth_token: token // Send the token as a query parameter
+            }
         })
             .then((response) => {
                 toast({
@@ -65,17 +84,17 @@ export default function EditContactModal({
                     isClosable: true,
                 });
                 onClose();
-                router.refresh()
+                router.refresh(); // Refresh the router to update the contacts list
             })
             .catch((error) => {
                 toast({
-                    title: error.response.data.message,
-                    description: error.response.data.message,
+                    title: error.response?.data?.message || 'An error occurred',
+                    description: error.response?.data?.message || 'An error occurred',
                     status: "error",
                     duration: 3000,
                     isClosable: true,
                 });
-            })
+            });
     };
 
     return (

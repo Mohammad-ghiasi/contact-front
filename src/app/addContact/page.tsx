@@ -11,8 +11,10 @@ import {
     Heading,
     useToast,
 } from "@chakra-ui/react";
-import api from "@/services/api";
+import axios from "axios";
+import Cookies from 'js-cookie'; // Import js-cookie
 import { useRouter } from "next/navigation";
+import api from "@/services/api";
 
 // Define the form input types
 type ContactFormInputs = {
@@ -32,30 +34,48 @@ export default function ContactForm() {
     } = useForm<ContactFormInputs>();
 
     // Form submit handler
-    const onSubmit: SubmitHandler<ContactFormInputs> = (data) => {
-        api.post('/contacts/contact', data)
-            .then((response) => {
-                toast({
-                    title: "Contact Added Successful.",
-                    description: "Contact Added successfully.",
-                    status: "success",
-                    duration: 5000,
-                    isClosable: true,
-                });
-                setTimeout(() => {
-                    reset();
-                    router.push("/");
-                }, 3000)
-            })
-            .catch((error) => {
-                toast({
-                    title: "Failed to create contact!",
-                    description: error.response.data.message,
-                    status: "error",
-                    duration: 5000,
-                    isClosable: true,
-                });
-            })
+    const onSubmit: SubmitHandler<ContactFormInputs> = async (data) => {
+        const token = Cookies.get('auth_token'); // Get the auth_token from cookies
+
+        if (!token) {
+            toast({
+                title: "Error",
+                description: "No auth_token found in cookies",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
+            return;
+        }
+
+        try {
+            await api.post('/contacts/contact', data, {
+                params: {
+                    auth_token: token // Send the token as a query parameter
+                }
+            });
+            toast({
+                title: "Contact Added Successful.",
+                description: "Contact added successfully.",
+                status: "success",
+                duration: 5000,
+                isClosable: true,
+            });
+            setTimeout(() => {
+                reset();
+                router.push("/");
+            }, 3000);
+        } catch (error: any) {
+            toast({
+                title: "Failed to create contact!",
+                description: error.response?.data?.message || 'An error occurred',
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
+            console.log(error);
+            
+        }
     };
 
     return (

@@ -27,7 +27,7 @@ export default function LoginForm() {
 
     // Function to set cookies
     const setCookie = (name: string, value: string, days: number) => {
-        Cookies.set(name, value, { expires: days, sameSite: 'Lax', secure: true });
+        Cookies.set(name, value, { expires: days, sameSite: 'None', secure: true });
     };
 
     const {
@@ -58,6 +58,7 @@ export default function LoginForm() {
             setTimeout(() => {
                 reset();
                 router.push("/");
+                router.refresh()
             }, 1500);
         } catch (error: any) {
             toast({

@@ -3,8 +3,10 @@
 import React from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button, useDisclosure, Spinner, Alert, AlertIcon, Box, Text, useToast } from '@chakra-ui/react';
-import api from '@/services/api';
+import axios from 'axios';
+import Cookies from 'js-cookie'; // Import js-cookie
 import EditContactModal from './EditeContact';
+import api from '@/services/api';
 
 type Contact = {
     name: string;
@@ -15,14 +17,28 @@ type Contact = {
 
 // Fetch contacts function
 const fetchContacts = async (): Promise<Contact[]> => {
-    const response = await api.get('/contacts/get-contacts');
-    
+    const token = Cookies.get('auth_token'); // Get the auth_token from cookies
+
+    if (!token) {
+        throw new Error('No auth_token found in cookies');
+    }
+
+    // Use token as a query parameter
+    const response = await api.get(`/contacts/get-contacts?auth_token=${token}`);
+
     return response.data.data;
 };
 
 // Delete contact function
 const deleteContact = async (contactId: string) => {
-    await api.delete(`/contacts/remove-contact?id=${contactId}`);
+    const token = Cookies.get('auth_token'); // Get the auth_token from cookies
+
+    if (!token) {
+        throw new Error('No auth_token found in cookies');
+    }
+
+    // Use token as a query parameter
+    await api.delete(`/contacts/remove-contact?id=${contactId}&auth_token=${token}`);
 };
 
 const ContactsList = () => {
