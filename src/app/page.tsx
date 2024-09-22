@@ -1,3 +1,4 @@
+import Ggg from "@/components/contacts/post";
 import ContactsList from "@/components/GetContacts";
 import Header from "@/components/header/Header";
 import PwaNotif from "@/components/PwaNotif";
@@ -25,6 +26,7 @@ export default async function Home() {
         </>
       )}
       <PwaNotif />
+      {/* <Ggg /> */}
     </>
   );
 }
